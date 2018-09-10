@@ -1,6 +1,6 @@
 ﻿<?php 
 if ($file=fopen('test1.txt','r+')) {
-    echo '123456777';
+    echo '1234567771000';
 } else {
     exit('123400');
 }
