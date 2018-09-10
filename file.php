@@ -1,6 +1,6 @@
 ﻿<?php 
 if ($file=fopen('test1.txt','r+')) {
-    echo '11111';
+    echo '11111试试水';
 } else {
     exit('123400');
 }
