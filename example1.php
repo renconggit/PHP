@@ -3,7 +3,7 @@ class classname
 {
     function __construct()
     {
-        echo '---------'.__METHOD__.'<br>',"\n";
+        echo '---------'.__METHOD__.'<br/>',"\n";
     }
 }
 function funcname()
