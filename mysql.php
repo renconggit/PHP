@@ -291,52 +291,83 @@
 //     echo '未查询到数据';
 // }
 
-echo "<table style='border: solid 1px black;'>";
-echo "<tr><th>Id</th><th>Firstname</th><th>Lastname</th></tr>";
 
-class TableRows extends RecursiveIteratorIterator
-{
-    function __construct($it)
-    {
-        parent::__construct($it, self::LEAVES_ONLY);
-    }
+//-----------------------------PDO迭代数据
 
-    function current()
-    {
-        return "<td style='width:150px;border:1px solid black;'>" . parent::current() . "</td>";
-    }
+// 在访问PHP类中的成员变量或方法时，如果被引用的变量或者方法被声明成const（定义常量）或者static（声明静态）, 那么就必须使用操作符::,
+// 反之如果被引用的变量或者方法没有被声明成const或者static, 那么就必须使用操作符->。
+// 另外，如果从类的内部访问const或者static变量或者方法, 那么就必须使用自引用的self，
+// 反之如果从类的内部访问不为const或者static变量或者方法, 那么就必须使用自引用的 $this。
+// 结论 : self与 $this的功能极其相似，但二者又不相同。 $this不能引用静态成员和常量。self更像类本事，而 $this更像是实例本身。
 
-    function beginChildren()
-    {
-        echo "<tr>";
-    }
+// echo "<table style='border: solid 1px black;'>";
+// echo "<tr><th>Id</th><th>Firstname</th><th>Lastname</th></tr>";
 
-    function endChildren()
-    {
-        echo "</tr>" . "\n";
-    }
-}
+// class TableRows extends RecursiveIteratorIterator
+// {
+//     function __construct($it)
+//     {
+//         parent::__construct($it, self::LEAVES_ONLY);
+//     }
 
-$servername = "localhost";
-$username = "root";
-$password = "123456";
-$dbname = "mypdodb";
+//     function current()
+//     {
+//         return "<td style='width:150px;border:1px solid black;'>" . parent::current() . "</td>";
+//     }
 
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt = $conn->prepare("SELECT id, firstname, lastname FROM MyGuests");
-    $stmt->execute();
+//     function beginChildren()
+//     {
+//         echo "<tr>";
+//     }
+
+//     function endChildren()
+//     {
+//         echo "</tr>" . "\n";
+//     }
+// }
+
+// $servername = "localhost";
+// $username = "root";
+// $password = "123456";
+// $dbname = "mypdodb";
+
+// try {
+//     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+//     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+//     $stmt = $conn->prepare("SELECT id, firstname, lastname FROM MyGuests");
+//     $stmt->execute();
  
-    // 设置结果集为关联数组
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    foreach (new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k => $v) {
-        echo $v;
-    }
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-}
-$conn = null;
-echo "</table>";
+//     // 设置结果集为关联数组
+//     $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//     $res = $stmt->fetchAll();
+//     foreach (new TableRows(new RecursiveArrayIterator($res)) as $k => $v) {
+//         echo $v;
+//     };
+//     foreach ($res as $a => $b) {
+//         echo '<tr>' . '<td>' . $b["id"] . '</td>' . '<td>' . $b["firstname"] . '</td>' . '<td>' . $b["id"] . '</td>' . '</tr>';
+//     };
 
+
+// } catch (PDOException $e) {
+//     echo "Error: " . $e->getMessage();
+// }
+// $conn = null;
+// echo "</table>";
+
+
+
+$con = mysqli_connect("localhost", "root", "123456", "mydb");
+// 检测连接
+if (mysqli_connect_errno()) {
+    echo "连接失败: " . mysqli_connect_error();
+}
+
+$result = mysqli_query($con, "SELECT * FROM myguests WHERE firstname='John' order by age desc,reg_date desc");
+
+while ($row = mysqli_fetch_array($result)) {
+    echo $row['firstname'] . " " . $row['lastname'] . " " . $row["phone"] . " " . $row["age"];
+    echo "<br>";
+}
 ?>
+
