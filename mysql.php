@@ -120,6 +120,7 @@
 //     $conn->commit();
 //     echo "批量插入成功";
 // } catch (PDOException $err) {
+//     $conn->rollBack();事物回滚
 //     echo $err->getMessage();
 // }
 
@@ -364,7 +365,7 @@ if (mysqli_connect_errno()) {
 }
 
 $result = mysqli_query($con, "SELECT * FROM myguests WHERE firstname='John' order by age desc,reg_date desc");
-
+mysqli_affected_rows($con);//返回受影响行数
 while ($row = mysqli_fetch_array($result)) {
     echo $row['firstname'] . " " . $row['lastname'] . " " . $row["phone"] . " " . $row["age"];
     echo "<br>";
